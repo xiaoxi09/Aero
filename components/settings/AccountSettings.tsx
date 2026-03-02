@@ -116,7 +116,7 @@ export function AccountSettings() {
       <div className="space-y-6">
         {/* Current User Info */}
         {session && (
-          <div className="flex items-center justify-between p-4 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--radius-2xl)]">
+          <div className="flex items-center justify-between p-4 glass-card">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-[var(--radius-full)] bg-[var(--accent-color)]/10 flex items-center justify-center text-[var(--accent-color)] font-bold text-lg border border-[var(--glass-border)]">
                 {session.name.charAt(0)}
@@ -135,7 +135,7 @@ export function AccountSettings() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--radius-full)] text-[var(--text-color-secondary)] hover:text-red-500 hover:border-red-500/30 transition-all duration-200 cursor-pointer"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm glass-button bg-transparent! hover:bg-red-500/10 hover:text-red-500 border border-[var(--glass-border)] hover:border-red-500/30 text-[var(--text-color-secondary)]"
               >
                 <LogOut size={14} />
                 退出登录
@@ -157,7 +157,7 @@ export function AccountSettings() {
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between px-4 py-2.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--radius-2xl)]"
+                    className="flex items-center justify-between px-4 py-2.5 glass-card"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-[var(--radius-full)] bg-[var(--accent-color)]/10 flex items-center justify-center text-[var(--accent-color)] font-bold text-sm border border-[var(--glass-border)]">
@@ -169,7 +169,7 @@ export function AccountSettings() {
                       <span className={`text-xs px-2 py-0.5 rounded-[var(--radius-full)] ${
                         account.role === 'super_admin' || account.role === 'admin'
                           ? 'bg-[var(--accent-color)]/10 text-[var(--accent-color)]'
-                          : 'bg-[var(--glass-bg)] text-[var(--text-color-secondary)] border border-[var(--glass-border)]'
+                          : 'bg-transparent text-[var(--text-color-secondary)] border border-[var(--glass-border)]'
                       }`}>
                         {account.role === 'super_admin' ? '超级管理员' : account.role === 'admin' ? '管理员' : '观众'}
                       </span>
@@ -238,7 +238,7 @@ export function AccountSettings() {
             </div>
 
             {showConfigGen && (
-              <div className="space-y-4 p-4 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-[var(--radius-2xl)]">
+              <div className="space-y-4 p-4 glass-card">
                 <p className="text-xs text-[var(--text-color-secondary)]">
                   添加账户条目后，将生成的 <code className="px-1 py-0.5 bg-[var(--glass-bg)] rounded text-[10px]">ACCOUNTS</code> 环境变量值复制到部署配置中。
                   {configEntries.some(e => !e.password && e.name) && (

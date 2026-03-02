@@ -77,7 +77,7 @@ export function SearchBox({ onSearch, onClear, initialQuery = '', placeholder = 
                 onBlur={handleInputBlur}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                className="text-base sm:text-lg pr-28 sm:pr-36 md:pr-44 truncate"
+                className="text-base sm:text-lg pr-20 sm:pr-36 md:pr-44 truncate"
                 aria-label="搜索视频内容"
                 aria-expanded={isDropdownOpen}
                 aria-controls="search-history-dropdown"
@@ -85,22 +85,22 @@ export function SearchBox({ onSearch, onClear, initialQuery = '', placeholder = 
                 data-focusable
             />
 
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10">
+            <div className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 sm:gap-1 z-10">
                 {query && (
                     <button
                         type="button"
                         onClick={handleClear}
-                        className="p-2 text-[var(--text-color)] opacity-70 hover:opacity-100 transition-opacity touch-manipulation cursor-pointer"
+                        className="p-1 sm:p-2 text-[var(--text-color)] opacity-70 hover:opacity-100 transition-opacity touch-manipulation cursor-pointer"
                         aria-label="清除搜索"
                     >
-                        <Icons.X size={20} />
+                        <Icons.X size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                 )}
                 <Button
                     type="submit"
                     disabled={!query.trim()}
                     variant="primary"
-                    className="px-3 sm:px-4 md:px-6"
+                    className="px-2.5 sm:px-4 md:px-6 h-8 sm:h-10 text-sm sm:text-base mr-1 sm:mr-0"
                 >
                     <span className="flex items-center gap-2">
                         <Icons.Search size={20} />

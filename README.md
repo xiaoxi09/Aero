@@ -1,10 +1,12 @@
 [![Upstream Sync](https://github.com/sky06walker/KVideo/actions/workflows/Github_Upstream_Sync.yml/badge.svg)](https://github.com/sky06walker/KVideo/actions/workflows/Github_Upstream_Sync.yml)
 
-# 视频聚合平台 (KVideo)
+# Aero 视频平台 (Aero Video Platform)
 
 ![KVideo Banner](public/icon.png)
 
-> 一个基于 Next.js 16 构建的现代化视频聚合播放平台。采用独特的 "Liquid Glass" 设计语言，提供流畅的视觉体验和强大的视频搜索功能。
+Aero 是一个现代化的多源视频聚合搜索和播放平台。
+
+> ⚠️ **重要声明**：本项目仅供学习和技术交流使用。Aero 本身不提供、不存储任何视频内容，所有内容均来自互联网公开的第三方接口。采用独特的 "Liquid Glass" 设计语言，提供流畅的视觉体验和强大的视频搜索功能。
 
 **在线体验：[https://kvideo.pages.dev/](https://kvideo.pages.dev/)**
 
@@ -201,6 +203,7 @@ docker run -d -p 3000:3000 \
 ```
 
 **特点：**
+
 - 每个账户拥有独立的收藏、历史和设置数据
 - 管理员可管理源和设置，观众仅可查看和播放
 - 可同时配置 `ADMIN_PASSWORD`（作为超级管理员入口）
@@ -209,8 +212,8 @@ docker run -d -p 3000:3000 \
 
 通过 `PERSIST_SESSION` 环境变量控制用户登录后是否在设备上记住会话：
 
-| 变量名 | 选项 | 说明 | 默认值 |
-|--------|------|------|--------|
+| 变量名            | 选项             | 说明                                                                                           | 默认值 |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- | ------ |
 | `PERSIST_SESSION` | `true` / `false` | 是否在本地浏览器持久化保存登录状态。设置为 `true` 时，用户只需登录一次，后续访问无需再次登录。 | `true` |
 
 > [!NOTE]
@@ -222,11 +225,11 @@ docker run -d -p 3000:3000 \
 
 ### 可用环境变量：
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `NEXT_PUBLIC_SITE_TITLE` | 浏览器标签页标题 | `KVideo - 视频聚合平台` |
-| `NEXT_PUBLIC_SITE_DESCRIPTION` | 站点描述 | `视频聚合平台` |
-| `NEXT_PUBLIC_SITE_NAME` | 站点头部名称 | `KVideo` |
+| 变量名                         | 说明             | 默认值                  |
+| ------------------------------ | ---------------- | ----------------------- |
+| `NEXT_PUBLIC_SITE_TITLE`       | 浏览器标签页标题 | `KVideo - 视频聚合平台` |
+| `NEXT_PUBLIC_SITE_DESCRIPTION` | 站点描述         | `视频聚合平台`          |
+| `NEXT_PUBLIC_SITE_NAME`        | 站点头部名称     | `KVideo`                |
 
 ### 配置示例：
 
@@ -238,10 +241,12 @@ docker run -d -p 3000:3000 \
 
 **Cloudflare Pages 部署：**
 在 Cloudflare Pages 项目设置中添加环境变量：
+
 - 变量名：`NEXT_PUBLIC_SITE_NAME`
 - 变量值：`我的视频平台`
 
 **Docker 部署：**
+
 ```bash
 docker run -d -p 3000:3000 \
   -e NEXT_PUBLIC_SITE_NAME="我的视频平台" \
@@ -252,6 +257,7 @@ docker run -d -p 3000:3000 \
 
 **本地开发：**
 在项目根目录创建 `.env.local` 文件：
+
 ```env
 NEXT_PUBLIC_SITE_NAME=我的视频平台
 NEXT_PUBLIC_SITE_TITLE=我的视频 - 聚合播放平台
@@ -285,12 +291,14 @@ docker run -d -p 3000:3000 -e SUBSCRIPTION_SOURCES='[{"name":"MySource","url":".
 **Vercel 部署：**
 
 在 Vercel 项目设置中添加环境变量：
+
 - 变量名：`SUBSCRIPTION_SOURCES`
 - 变量值：`[{"name":"...","url":"..."}]`
 
 **Cloudflare Pages 部署：**
 
 在 Cloudflare Pages 项目设置中添加环境变量：
+
 - 变量名：`NEXT_PUBLIC_SUBSCRIPTION_SOURCES`
 - 变量值：`[{"name":"...","url":"..."}]`
 
@@ -298,10 +306,10 @@ docker run -d -p 3000:3000 -e SUBSCRIPTION_SOURCES='[{"name":"MySource","url":".
 
 通过环境变量自定义广告过滤关键词，用于在 HLS 播放时识别和过滤广告片段。
 
-| 变量名 | 说明 |
-|--------|------|
-| `AD_KEYWORDS` 或 `NEXT_PUBLIC_AD_KEYWORDS` | 广告关键词，逗号或换行分隔 |
-| `AD_KEYWORDS_FILE` | 广告关键词文件路径（适用于 Docker 挂载） |
+| 变量名                                     | 说明                                     |
+| ------------------------------------------ | ---------------------------------------- |
+| `AD_KEYWORDS` 或 `NEXT_PUBLIC_AD_KEYWORDS` | 广告关键词，逗号或换行分隔               |
+| `AD_KEYWORDS_FILE`                         | 广告关键词文件路径（适用于 Docker 挂载） |
 
 **示例：**
 
@@ -320,9 +328,9 @@ docker run -d -p 3000:3000 \
 
 通过环境变量预设弹幕聚合 API 地址，用户无需手动配置即可使用弹幕功能。
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `NEXT_PUBLIC_DANMAKU_API_URL` | 弹幕聚合 API 地址 | - |
+| 变量名                        | 说明              | 默认值 |
+| ----------------------------- | ----------------- | ------ |
+| `NEXT_PUBLIC_DANMAKU_API_URL` | 弹幕聚合 API 地址 | -      |
 
 需要自建或使用兼容 [danmu_api](https://github.com/huangxd-/danmu_api) 格式的弹幕聚合服务。
 
@@ -347,14 +355,14 @@ docker run -d -p 3000:3000 \
 
 **源对象字段说明：**
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `id` | string | 是 | 唯一标识符，建议使用英文 |
-| `name` | string | 是 | 显示名称 |
-| `baseUrl` | string | 是 | API 地址 (例如: `https://example.com/api.php/provide/vod`) |
-| `group` | string | 否 | 分组，可选值: `"normal"` (默认) 或 `"premium"` |
-| `enabled` | boolean | 否 | 是否启用，默认为 `true` |
-| `priority` | number | 否 | 优先级，数字越小优先级越高，默认为 1 |
+| 字段       | 类型    | 必填 | 说明                                                       |
+| ---------- | ------- | ---- | ---------------------------------------------------------- |
+| `id`       | string  | 是   | 唯一标识符，建议使用英文                                   |
+| `name`     | string  | 是   | 显示名称                                                   |
+| `baseUrl`  | string  | 是   | API 地址 (例如: `https://example.com/api.php/provide/vod`) |
+| `group`    | string  | 否   | 分组，可选值: `"normal"` (默认) 或 `"premium"`             |
+| `enabled`  | boolean | 否   | 是否启用，默认为 `true`                                    |
+| `priority` | number  | 否   | 优先级，数字越小优先级越高，默认为 1                       |
 
 **示例 JSON：**
 
@@ -398,35 +406,35 @@ docker run -d -p 3000:3000 \
 
 ## 全部环境变量参考
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `ADMIN_PASSWORD` | 管理员密码 | - |
-| `ACCESS_PASSWORD` | 访问密码（向后兼容，等同于 `ADMIN_PASSWORD`） | - |
-| `ACCOUNTS` | 多账户配置，格式：`密码:名称[:角色]`，逗号分隔 | - |
-| `PERSIST_SESSION` | 是否持久化登录会话 | `true` |
-| `NEXT_PUBLIC_SITE_TITLE` | 浏览器标签页标题 | `KVideo - 视频聚合平台` |
-| `NEXT_PUBLIC_SITE_DESCRIPTION` | 站点描述 | `视频聚合平台` |
-| `NEXT_PUBLIC_SITE_NAME` | 站点头部名称 | `KVideo` |
-| `SUBSCRIPTION_SOURCES` | 自动订阅源配置（服务端） | - |
-| `NEXT_PUBLIC_SUBSCRIPTION_SOURCES` | 自动订阅源配置（客户端） | - |
-| `AD_KEYWORDS` / `NEXT_PUBLIC_AD_KEYWORDS` | 广告过滤关键词 | - |
-| `AD_KEYWORDS_FILE` | 广告关键词文件路径 | - |
-| `NEXT_PUBLIC_DANMAKU_API_URL` | 弹幕聚合 API 地址 | - |
+| 变量名                                    | 说明                                           | 默认值                  |
+| ----------------------------------------- | ---------------------------------------------- | ----------------------- |
+| `ADMIN_PASSWORD`                          | 管理员密码                                     | -                       |
+| `ACCESS_PASSWORD`                         | 访问密码（向后兼容，等同于 `ADMIN_PASSWORD`）  | -                       |
+| `ACCOUNTS`                                | 多账户配置，格式：`密码:名称[:角色]`，逗号分隔 | -                       |
+| `PERSIST_SESSION`                         | 是否持久化登录会话                             | `true`                  |
+| `NEXT_PUBLIC_SITE_TITLE`                  | 浏览器标签页标题                               | `KVideo - 视频聚合平台` |
+| `NEXT_PUBLIC_SITE_DESCRIPTION`            | 站点描述                                       | `视频聚合平台`          |
+| `NEXT_PUBLIC_SITE_NAME`                   | 站点头部名称                                   | `KVideo`                |
+| `SUBSCRIPTION_SOURCES`                    | 自动订阅源配置（服务端）                       | -                       |
+| `NEXT_PUBLIC_SUBSCRIPTION_SOURCES`        | 自动订阅源配置（客户端）                       | -                       |
+| `AD_KEYWORDS` / `NEXT_PUBLIC_AD_KEYWORDS` | 广告过滤关键词                                 | -                       |
+| `AD_KEYWORDS_FILE`                        | 广告关键词文件路径                             | -                       |
+| `NEXT_PUBLIC_DANMAKU_API_URL`             | 弹幕聚合 API 地址                              | -                       |
 
 ## 技术栈
 
 ### 前端核心
 
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| **[Next.js](https://nextjs.org/)** | 16.1.6 | React 框架，使用 App Router |
-| **[React](https://react.dev/)** | 19.2.4 | UI 组件库 |
-| **[TypeScript](https://www.typescriptlang.org/)** | 5.x | 类型安全的 JavaScript |
-| **[Tailwind CSS](https://tailwindcss.com/)** | 4.x | 实用优先的 CSS 框架 |
-| **[Zustand](https://github.com/pmndrs/zustand)** | 5.x | 轻量级状态管理 |
-| **[hls.js](https://github.com/video-dev/hls.js/)** | 1.x | HLS 流媒体播放引擎 |
-| **[Lucide React](https://lucide.dev/)** | 0.x | 图标库 |
-| **[@dnd-kit](https://dndkit.com/)** | 6.x | 拖拽交互（标签排序等） |
+| 技术                                               | 版本   | 用途                        |
+| -------------------------------------------------- | ------ | --------------------------- |
+| **[Next.js](https://nextjs.org/)**                 | 16.1.6 | React 框架，使用 App Router |
+| **[React](https://react.dev/)**                    | 19.2.4 | UI 组件库                   |
+| **[TypeScript](https://www.typescriptlang.org/)**  | 5.x    | 类型安全的 JavaScript       |
+| **[Tailwind CSS](https://tailwindcss.com/)**       | 4.x    | 实用优先的 CSS 框架         |
+| **[Zustand](https://github.com/pmndrs/zustand)**   | 5.x    | 轻量级状态管理              |
+| **[hls.js](https://github.com/video-dev/hls.js/)** | 1.x    | HLS 流媒体播放引擎          |
+| **[Lucide React](https://lucide.dev/)**            | 0.x    | 图标库                      |
+| **[@dnd-kit](https://dndkit.com/)**                | 6.x    | 拖拽交互（标签排序等）      |
 
 ### 开发工具
 
@@ -475,8 +483,8 @@ docker run -d -p 3000:3000 \
    - 点击 **Save and Deploy**。
 
 4. **关键步骤：修复运行时环境**
-   > *注意：此时部署虽然显示"Success"，但你会发现访问网页会报错。这是因为缺少必要的兼容性配置。请按以下步骤修复：*
 
+   > _注意：此时部署虽然显示"Success"，但你会发现访问网页会报错。这是因为缺少必要的兼容性配置。请按以下步骤修复：_
    - 进入 **[项目设置页面](https://dash.cloudflare.com/?to=/:account/pages/view/kvideo/settings/production)** (如果你的项目名不是 kvideo，请在控制台手动查找 Settings -> Functions)。
    - 拉到页面底部找到 **Compatibility flags** 部分。
    - 添加标志：`nodejs_compat`
@@ -500,6 +508,7 @@ docker run -d -p 3000:3000 --name kvideo kuekhaoyang/kvideo:latest
 应用将在 `http://localhost:3000` 启动。
 
 > **多架构支持**：镜像支持 2 种主流平台架构：
+>
 > - `linux/amd64` - Intel/AMD 64位（大多数服务器、PC、Intel Mac）
 > - `linux/arm64` - ARM 64位（Apple Silicon Mac、AWS Graviton、树莓派 4/5）
 
@@ -549,6 +558,7 @@ npm start
 **步骤：**
 
 1. **修改目标 URL**：编辑 `android-tv/app/src/main/java/com/kvideo/tv/MainActivity.kt`，将 `KVIDEO_URL` 改为你的部署地址：
+
    ```kotlin
    private const val KVIDEO_URL = "https://your-kvideo-instance.com"
    ```
@@ -560,10 +570,12 @@ npm start
    - APK 输出在 `android-tv/app/build/outputs/apk/debug/app-debug.apk`
 
 3. **使用命令行构建**：
+
    ```bash
    cd android-tv
    ./gradlew assembleDebug
    ```
+
    APK 输出在 `app/build/outputs/apk/debug/app-debug.apk`
 
 4. **安装到 Android TV**：
@@ -590,6 +602,7 @@ npm start
 2. **替换源文件**：将项目中 `apple-tv/KVideoTV/KVideoTV/` 目录下的 `KVideoTVApp.swift` 和 `ContentView.swift` 复制替换 Xcode 生成的同名文件
 
 3. **修改目标 URL**：编辑 `ContentView.swift`，将 `kvideoURL` 改为你的部署地址：
+
    ```swift
    let kvideoURL = "https://your-kvideo-instance.com"
    ```
@@ -599,6 +612,7 @@ npm start
 5. **构建运行**：连接 Apple TV（或使用 tvOS 模拟器），按 **Cmd+R** 构建运行
 
 **工作原理：**
+
 - 全屏 `WKWebView` 加载 KVideo URL
 - 页面加载后自动注入 `tv-mode` CSS 类，激活 TV 优化样式
 - Apple TV 遥控器滑动手势映射为滚动，点击映射为聚焦/选择
@@ -647,6 +661,7 @@ npm start
 **想要参与开发？请查看 [贡献指南](CONTRIBUTING.md) 了解详细的开发规范和流程。**
 
 快速开始：
+
 1. **报告 Bug**：[提交 Issue](https://github.com/KuekHaoYang/KVideo/issues)
 2. **功能建议**：在 Issues 中提出你的想法
 3. **代码贡献**：Fork → Branch → PR
