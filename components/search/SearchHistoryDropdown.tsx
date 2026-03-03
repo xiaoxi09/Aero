@@ -57,7 +57,7 @@ export function SearchHistoryDropdown({
   return (
     <div
       ref={dropdownRef}
-      className="search-history-dropdown absolute top-full left-0 right-0 mt-2 z-[9999]"
+      className={`search-history-dropdown absolute left-0 right-0 z-9999 bottom-[calc(100%+12px)] top-auto mb-0`}
       role="listbox"
       aria-label="搜索历史"
       onMouseDown={(e) => {

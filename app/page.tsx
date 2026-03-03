@@ -40,11 +40,8 @@ function HomePage() {
       {/* Glass Navbar */}
       <Navbar onReset={handleReset} />
 
-      {/* Search Form - Separate from navbar */}
-      <div className="max-w-7xl mx-auto px-4 mt-6 mb-8 relative" style={{
-        transform: 'translate3d(0, 0, 0)',
-        zIndex: 1000
-      }}>
+      {/* Search Form */}
+      <div className="max-w-7xl mx-auto px-4 mt-6 mb-8 w-full relative z-40">
         <SearchForm
           onSearch={handleSearch}
           onClear={handleReset}
@@ -57,7 +54,7 @@ function HomePage() {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 sm:pb-20">
         {/* Results Section */}
         {(results.length >= 1 || (!loading && results.length > 0)) && (
           <SearchResults
@@ -94,7 +91,7 @@ export default function Home() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-[var(--accent-color)] border-t-transparent"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-(--accent-color) border-t-transparent"></div>
       </div>
     }>
       <HomePage />

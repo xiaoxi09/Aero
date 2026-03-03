@@ -12,6 +12,7 @@ import { siteConfig } from "@/lib/config/site-config";
 import { AdKeywordsInjector } from "@/components/AdKeywordsInjector";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { ScrollPositionManager } from "@/components/ScrollPositionManager";
+import { CloudSyncProvider } from "@/components/CloudSyncProvider";
 import fs from 'fs';
 import path from 'path';
 
@@ -100,10 +101,12 @@ export default function RootLayout({
           <TVProvider>
             <TVNavigationInitializer />
             <PasswordGate hasAuth={!!(process.env.ADMIN_PASSWORD || process.env.ACCOUNTS || process.env.ACCESS_PASSWORD)}>
-              <AdKeywordsWrapper />
-              {children}
-              <BackToTop />
-              <ScrollPositionManager />
+              <CloudSyncProvider>
+                <AdKeywordsWrapper />
+                {children}
+                <BackToTop />
+                <ScrollPositionManager />
+              </CloudSyncProvider>
             </PasswordGate>
           </TVProvider>
           <Analytics />
