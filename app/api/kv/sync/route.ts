@@ -9,10 +9,20 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 // In development, `getRequestContext` might not be available or setup, so we gracefully degrade.
 async function getKV() {
     try {
-        return getRequestContext()?.env?.KVIDEO_KV;
+        const ctx = getRequestContext();
+        if (ctx?.env?.KVIDEO_KV) {
+            return ctx.env.KVIDEO_KV;
+        }
     } catch (e) {
-        return null;
+        // Fallback below
     }
+    
+    // Fallback to process.env (e.g. Next.js standalone dev or alternative edge adapters)
+    if (typeof process !== 'undefined' && process.env && (process.env as any).KVIDEO_KV) {
+        return (process.env as any).KVIDEO_KV;
+    }
+    
+    return null;
 }
 
 export async function GET(request: NextRequest) {

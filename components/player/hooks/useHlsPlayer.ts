@@ -74,23 +74,24 @@ export function useHlsPlayer({
                     enableWorker: true,
                     lowLatencyMode: false,
 
-                    // Buffer Settings
-                    maxBufferLength: 60,
-                    maxMaxBufferLength: 120,
-                    maxBufferSize: 60 * 1000 * 1000,
+                    // Buffer Settings (No Limit / Unlimited loading)
+                    maxBufferLength: 3600, // Try to buffer up to an hour ahead
+                    maxMaxBufferLength: 7200, // Maximum theoretical buffer 2 hours
+                    maxBufferSize: 2000 * 1000 * 1000, // 2GB max buffer memory limit
                     maxBufferHole: 0.5,
+                    capLevelToPlayerSize: true, // Only download resolution needed for the player size
 
                     // Start with more buffer
                     startFragPrefetch: true,
 
-                    // ABR Settings
-                    abrEwmaDefaultEstimate: 500000,
+                    // ABR Settings (Aggressive bandwidth scaling)
+                    abrEwmaDefaultEstimate: 5000000, // Start assuming 5Mbps rather than 500kbps
                     abrEwmaFastLive: 3,
                     abrEwmaSlowLive: 9,
                     abrEwmaFastVoD: 3,
                     abrEwmaSlowVoD: 9,
-                    abrBandWidthFactor: 0.8,
-                    abrBandWidthUpFactor: 0.7,
+                    abrBandWidthFactor: 0.95, // Use 95% of estimated bandwidth (default 0.8)
+                    abrBandWidthUpFactor: 0.9, // Upshift using 90% (default 0.7)
 
                     // Loading Settings
                     fragLoadingMaxRetry: 6,

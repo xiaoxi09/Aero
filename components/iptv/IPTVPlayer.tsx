@@ -16,9 +16,12 @@ const HLS_LIVE_CONFIG: Partial<Hls['config']> = {
   lowLatencyMode: true,
   liveDurationInfinity: true,
   manifestLoadingTimeOut: 10000,
-  manifestLoadingMaxRetry: 2,
-  levelLoadingTimeOut: 10000,
-  fragLoadingTimeOut: 15000,
+  // Buffer settings for smoother Live Playback (Unlimited boundaries)
+  maxBufferLength: 1200, // Large buffer for time-shifting if playlist allows
+  maxMaxBufferLength: 2400,
+  maxBufferSize: 2000 * 1000 * 1000, // 2GB max buffer memory
+  liveSyncDurationCount: 3,
+  liveMaxLatencyDurationCount: 10,
 };
 
 const LOADING_TIMEOUT_MS = 20000;

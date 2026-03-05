@@ -8,6 +8,7 @@ import { useHistoryStore, usePremiumHistoryStore } from '@/lib/store/history-sto
 import { useFavoritesStore, usePremiumFavoritesStore } from '@/lib/store/favorites-store';
 import { useSearchHistoryStore, usePremiumSearchHistoryStore } from '@/lib/store/search-history-store';
 import { useIPTVStore } from '@/lib/store/iptv-store';
+import { useSyncStore } from '@/lib/store/sync-store';
 
 const DEBOUNCE_MS = 5000;
 
@@ -17,11 +18,37 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
     const isPushing = useRef(false);
     // Track session
     const [profileId, setProfileId] = useState<string | null>(null);
+    const setStatus = useSyncStore((state) => state.setStatus);
 
     // Initial check for profile ID
     useEffect(() => {
-        setProfileId(getProfileId() || null);
-    }, []);
+        const init = async () => {
+            try {
+                const sessionProfileId = getProfileId();
+                if (sessionProfileId) {
+                    setProfileId(sessionProfileId);
+                    return;
+                }
+                
+                // If not logged in, check if auth is even enabled
+                const res = await fetch('/api/auth');
+                const data = await res.json();
+                
+                if (!data.hasAuth) {
+                    // Single user mode - always sync to a default profile
+                    setProfileId('default_single_user');
+                } else {
+                    // Auth enabled but not logged in, don't sync
+                    setStatus('local_only', '未登录，仅保存在本地');
+                    setProfileId(null);
+                }
+            } catch (error) {
+                console.error('Failed to check auth status', error);
+                setStatus('local_only', '无法连接服务，仅保存在本地');
+            }
+        };
+        init();
+    }, [setStatus]);
 
     // 1. Pull from Cloud
     useEffect(() => {
@@ -33,16 +60,23 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                 return;
             }
 
+            setStatus('syncing', '正在拉取云端数据...');
+
             try {
                 const res = await fetch('/api/kv/sync', {
                     headers: { 'x-profile-id': profileId }
                 });
                 
-                if (!res.ok) return;
+                if (!res.ok) {
+                    setStatus('error', '服务器响应错误');
+                    return;
+                }
 
                 const json = await res.json();
                 
-                if (json?.data && isMounted) {
+                if (json.warning) {
+                    setStatus('local_only', '未绑定 KV 存储，仅保存在本地');
+                } else if (json?.data && isMounted) {
                     const cloudData = json.data;
                     
                     if (cloudData.settings) settingsStore.saveSettings(cloudData.settings);
@@ -54,9 +88,14 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                     if (cloudData.searchHistory) useSearchHistoryStore.setState(cloudData.searchHistory);
                     if (cloudData.premiumSearchHistory) usePremiumSearchHistoryStore.setState(cloudData.premiumSearchHistory);
                     if (cloudData.iptv) useIPTVStore.setState(cloudData.iptv);
+
+                    setStatus('success', '已同步最新数据');
+                } else {
+                    setStatus('success', '暂无云端数据');
                 }
             } catch (error) {
                 console.error('Failed to pull from Cloudflare KV', error);
+                setStatus('error', '拉取数据失败，请检查网络');
             } finally {
                 if (isMounted) setHasPulled(true);
             }
@@ -66,7 +105,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
         pullData();
 
         return () => { isMounted = false; };
-    }, [profileId]);
+    }, [profileId, setStatus]);
 
     // 2. Push to Cloud when state changes, debounced
     useEffect(() => {
@@ -90,10 +129,12 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
             syncTimer.current = setTimeout(async () => {
                 if (isPushing.current) return;
                 isPushing.current = true;
+                
+                setStatus('syncing', '正在保存到云端...');
 
                 try {
                     const payload = serializeState();
-                    await fetch('/api/kv/sync', {
+                    const res = await fetch('/api/kv/sync', {
                         method: 'POST',
                         headers: {
                             'x-profile-id': profileId,
@@ -101,8 +142,19 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                         },
                         body: JSON.stringify(payload)
                     });
+                    
+                    const json = await res.json();
+                    
+                    if (json.warning) {
+                        setStatus('local_only', '未绑定 KV 存储，仅保存在本地');
+                    } else if (res.ok) {
+                        setStatus('success', '已保存到云端');
+                    } else {
+                        setStatus('error', json.error || '保存失败');
+                    }
                 } catch (error) {
                     console.error('KV Sync Push Failed:', error);
+                    setStatus('error', '保存数据失败，请检查网络');
                 } finally {
                     isPushing.current = false;
                 }
@@ -123,7 +175,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
             if (syncTimer.current) clearTimeout(syncTimer.current);
             u1(); u2(); u3(); u4(); u5(); u6(); u7(); u8(); u9();
         };
-    }, [hasPulled, profileId]);
+    }, [hasPulled, profileId, setStatus]);
 
     return <>{children}</>;
 }
