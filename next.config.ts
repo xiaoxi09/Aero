@@ -19,11 +19,8 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
-  output: 'standalone',
-  outputFileTracingRoot: __dirname,
-  turbopack: {
-    root: __dirname,
-  },
+  // NOTE: Do NOT use output: 'standalone' - it's incompatible with @cloudflare/next-on-pages
+  // The Pages adapter generates its own output format.
 
   images: {
     remotePatterns: [
