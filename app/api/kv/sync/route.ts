@@ -8,21 +8,30 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 // We want to safely get the KV namespace.
 // In development, `getRequestContext` might not be available or setup, so we gracefully degrade.
 async function getKV() {
+    let debugInfo: any = {};
     try {
         const ctx = getRequestContext();
+        debugInfo.hasCtx = !!ctx;
+        debugInfo.hasEnv = !!ctx?.env;
+        debugInfo.envKeys = ctx?.env ? Object.keys(ctx.env) : [];
+        
         if (ctx?.env?.KVIDEO_KV) {
-            return ctx.env.KVIDEO_KV;
+            return { kv: ctx.env.KVIDEO_KV, debug: debugInfo };
         }
     } catch (e) {
-        // Fallback below
+        debugInfo.ctxError = e instanceof Error ? e.message : String(e);
     }
     
     // Fallback to process.env (e.g. Next.js standalone dev or alternative edge adapters)
-    if (typeof process !== 'undefined' && process.env && (process.env as any).KVIDEO_KV) {
-        return (process.env as any).KVIDEO_KV;
+    if (typeof process !== 'undefined' && process.env) {
+        debugInfo.hasProcessEnv = true;
+        debugInfo.processEnvKeys = Object.keys(process.env).filter(k => k.includes('KV'));
+        if ((process.env as any).KVIDEO_KV) {
+            return { kv: (process.env as any).KVIDEO_KV, debug: debugInfo };
+        }
     }
     
-    return null;
+    return { kv: null, debug: debugInfo };
 }
 
 export async function GET(request: NextRequest) {
@@ -32,12 +41,13 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Missing x-profile-id header' }, { status: 400 });
     }
 
-    const kv = await getKV();
+    const { kv, debug } = await getKV();
 
     if (!kv) {
         // Fallback or dev mode handling
         return NextResponse.json({
             warning: 'KV namespace not found. This is normal in local dev without Wrangler.',
+            debug,
             data: null
         }, { status: 200 });
     }
@@ -60,11 +70,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Missing x-profile-id header' }, { status: 400 });
     }
 
-    const kv = await getKV();
+    const { kv, debug } = await getKV();
 
     if (!kv) {
         return NextResponse.json({
             warning: 'KV namespace not found. Skipping backup.',
+            debug,
             success: true
         }, { status: 200 });
     }

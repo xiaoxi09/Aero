@@ -75,6 +75,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                 const json = await res.json();
                 
                 if (json.warning) {
+                    console.warn('KV Bound Missing:', json.warning, 'Debug:', json.debug);
                     setStatus('local_only', '未绑定 KV 存储，仅保存在本地');
                 } else if (json?.data && isMounted) {
                     const cloudData = json.data;
@@ -146,6 +147,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                     const json = await res.json();
                     
                     if (json.warning) {
+                        console.warn('KV Bound Missing on POST:', json.warning, 'Debug:', json.debug);
                         setStatus('local_only', '未绑定 KV 存储，仅保存在本地');
                     } else if (res.ok) {
                         setStatus('success', '已保存到云端');
