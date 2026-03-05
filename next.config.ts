@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
-// Inject Cloudflare bindings into the Next.js dev server and build context
-import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
-
 // Disable setupDevPlatform when building for production (Pages handles this natively at runtime)
-// But we *do* need it locally to test KV bindings.
+// But we *do* need it locally to test KV bindings. We use a dynamic import so it doesn't 
+// crash the production build looking for wrangler.
 if (process.env.NODE_ENV === 'development') {
-  setupDevPlatform().catch(console.error);
+  import('@cloudflare/next-on-pages/next-dev').then(({ setupDevPlatform }) => {
+      setupDevPlatform().catch(console.error);
+  }).catch(console.error);
 }
 
 const nextConfig: NextConfig = {
