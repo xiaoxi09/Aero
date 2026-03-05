@@ -9,6 +9,16 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 // In development, `getRequestContext` might not be available or setup, so we gracefully degrade.
 async function getKV() {
     let debugInfo: any = {};
+    
+    // Fallback to process.env (e.g. Next.js standalone dev, Cloudflare Pages native injection, or alternative edge adapters)
+    if (typeof process !== 'undefined' && process.env) {
+        debugInfo.hasProcessEnv = true;
+        debugInfo.processEnvKeys = Object.keys(process.env).filter(k => k.includes('KV'));
+        if ((process.env as any).KVIDEO_KV) {
+            return { kv: (process.env as any).KVIDEO_KV, debug: debugInfo };
+        }
+    }
+
     try {
         const ctx = getRequestContext();
         debugInfo.hasCtx = !!ctx;
@@ -20,15 +30,6 @@ async function getKV() {
         }
     } catch (e) {
         debugInfo.ctxError = e instanceof Error ? e.message : String(e);
-    }
-    
-    // Fallback to process.env (e.g. Next.js standalone dev or alternative edge adapters)
-    if (typeof process !== 'undefined' && process.env) {
-        debugInfo.hasProcessEnv = true;
-        debugInfo.processEnvKeys = Object.keys(process.env).filter(k => k.includes('KV'));
-        if ((process.env as any).KVIDEO_KV) {
-            return { kv: (process.env as any).KVIDEO_KV, debug: debugInfo };
-        }
     }
     
     return { kv: null, debug: debugInfo };
