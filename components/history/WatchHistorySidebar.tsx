@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useHistory } from '@/lib/store/history-store';
+import { useUIStore } from '@/lib/store/ui-store';
 import { Icons } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { HistoryHeader } from './HistoryHeader';
@@ -15,7 +16,9 @@ import { HistoryFooter } from './HistoryFooter';
 import { trapFocus } from '@/lib/accessibility/focus-management';
 
 export function WatchHistorySidebar({ isPremium = false }: { isPremium?: boolean }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useUIStore((state) => state.isHistoryOpen);
+  const setIsOpen = useUIStore((state) => state.setHistoryOpen);
+  
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     showIdentifier?: string;
@@ -80,14 +83,7 @@ export function WatchHistorySidebar({ isPremium = false }: { isPremium?: boolean
 
   return (
     <>
-      {/* Toggle Button - Left side, Stacked Bottom */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed left-2 sm:left-6 top-[55%] sm:top-[45%] translate-y-[calc(-50%+3.5rem)] sm:translate-y-[calc(-50%+4rem)] z-40 btn-glass p-2 sm:p-3 hover:scale-105"
-        aria-label="打开观看历史"
-      >
-        <Icons.History className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--text-color)]" />
-      </button>
+      {/* Toggle Button - Removed in favor of BottomNav */}
 
       {/* Backdrop */}
       {isOpen && (

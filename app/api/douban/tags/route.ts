@@ -4,9 +4,22 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type') || 'movie'; // movie or tv
+    const type = searchParams.get('type') || 'movie'; // movie, tv, anime, variety
 
     try {
+        // Intercept anime and variety since Douban only supports movie/tv
+        if (type === 'anime') {
+            return NextResponse.json({
+                tags: ['近期热门', '日本动画', '国产动画', '欧美动画']
+            });
+        }
+        
+        if (type === 'variety') {
+            return NextResponse.json({
+                tags: ['近期热门', '大陆综艺', '港台综艺', '日韩综艺', '欧美综艺']
+            });
+        }
+
         const url = `https://movie.douban.com/j/search_tags?type=${type}&source=index`;
 
         const response = await fetch(url, {

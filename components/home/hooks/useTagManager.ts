@@ -7,10 +7,11 @@ const DEFAULT_TAG = { id: 'popular', label: '热门', value: '热门' };
 const STORAGE_KEY_PREFIX = 'kvideo_custom_tags_';
 
 export function useTagManager() {
-    const [contentType, setContentType] = useState<'movie' | 'tv'>(() => {
+    const [contentType, setContentType] = useState<'movie' | 'tv' | 'anime' | 'variety'>(() => {
         if (typeof window === 'undefined') return 'movie';
         const saved = localStorage.getItem('kvideo_default_content_type');
-        return saved === 'tv' ? 'tv' : 'movie';
+        if (saved === 'tv' || saved === 'anime' || saved === 'variety') return saved;
+        return 'movie';
     });
     const [selectedTag, setSelectedTag] = useState(DEFAULT_TAG.value);
     const [tags, setTags] = useState<any[]>([]);

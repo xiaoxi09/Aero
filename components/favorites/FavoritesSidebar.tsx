@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useFavorites } from '@/lib/store/favorites-store';
+import { useUIStore } from '@/lib/store/ui-store';
 import { WatchHistorySidebar } from '@/components/history/WatchHistorySidebar';
 import { Icons } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -16,7 +17,9 @@ import { FavoritesFooter } from './FavoritesFooter';
 import { trapFocus } from '@/lib/accessibility/focus-management';
 
 export function FavoritesSidebar({ isPremium = false }: { isPremium?: boolean }) {
-    const [isOpen, setIsOpen] = useState(false);
+    const isOpen = useUIStore((state) => state.isFavoritesOpen);
+    const setIsOpen = useUIStore((state) => state.setFavoritesOpen);
+
     const [deleteConfirm, setDeleteConfirm] = useState<{
         isOpen: boolean;
         videoId?: string;
@@ -82,14 +85,7 @@ export function FavoritesSidebar({ isPremium = false }: { isPremium?: boolean })
 
     return (
         <>
-            {/* Toggle Button - Left side, Stacked Top */}
-            <button
-                onClick={() => setIsOpen(true)}
-                className="fixed left-2 sm:left-6 top-[55%] sm:top-[45%] -translate-y-1/2 z-40 btn-glass p-2 sm:p-3 hover:scale-105"
-                aria-label="打开收藏夹"
-            >
-                <Icons.Heart className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--text-color)]" />
-            </button>
+            {/* Toggle Button - Removed in favor of BottomNav */}
 
             {/* Backdrop */}
             {isOpen && (

@@ -95,7 +95,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                     setStatus('success', '暂无云端数据');
                 }
             } catch (error) {
-                console.error('Failed to pull from Cloudflare KV', error);
+                console.error('Failed to pull from Upstash Redis', error);
                 setStatus('error', '拉取数据失败，请检查网络');
             } finally {
                 if (isMounted) setHasPulled(true);
@@ -155,7 +155,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                         setStatus('error', json.error || '保存失败');
                     }
                 } catch (error) {
-                    console.error('KV Sync Push Failed:', error);
+                    console.error('Upstash Sync Push Failed:', error);
                     setStatus('error', '保存数据失败，请检查网络');
                 } finally {
                     isPushing.current = false;

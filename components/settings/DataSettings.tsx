@@ -32,7 +32,7 @@ export function DataSettings({ onExport, onImport, onReset }: DataSettingsProps)
                     <div className="flex flex-col items-end">
                         <div className="flex items-center gap-2 text-green-500">
                             <Cloud size={16} />
-                            <span className="text-sm font-medium">Cloudflare KV</span>
+                            <span className="text-sm font-medium">Upstash Redis</span>
                         </div>
                         {lastSyncTime && (
                            <span className="text-[10px] text-[var(--text-color-secondary)] mt-1">

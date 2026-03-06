@@ -11,7 +11,7 @@ interface DoubanMovie {
 
 const PAGE_LIMIT = 20;
 
-export function usePopularMovies(selectedTag: string, tags: any[], contentType: 'movie' | 'tv' = 'movie') {
+export function usePopularMovies(selectedTag: string, tags: any[], contentType: 'movie' | 'tv' | 'anime' | 'variety' = 'movie') {
     const [movies, setMovies] = useState<DoubanMovie[]>([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);

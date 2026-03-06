@@ -96,28 +96,47 @@ export function PopularFeatures({ onSearch }: PopularFeaturesProps) {
       {/* Content Type Toggle (Capsule Liquid Glass - Fixed & Centered) */}
       {!effectiveRecommendSelected && (
         <div className="mb-6 sm:mb-10 flex justify-center">
-          <div className="relative w-[280px] sm:w-80 p-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-full grid grid-cols-2 backdrop-blur-2xl shadow-lg ring-1 ring-white/10 overflow-hidden">
+          <div className="relative w-[340px] sm:w-[500px] p-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-full grid grid-cols-4 backdrop-blur-2xl shadow-lg ring-1 ring-white/10 overflow-hidden">
             {/* Sliding Indicator */}
             <div
-              className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[var(--accent-color)] rounded-full transition-transform duration-400 cubic-bezier(0.4, 0, 0.2, 1) shadow-[0_0_15px_rgba(0,122,255,0.4)]"
+              className="absolute top-1 bottom-1 w-[calc(25%-4px)] bg-[var(--accent-color)] rounded-full transition-transform duration-400 cubic-bezier(0.4, 0, 0.2, 1) shadow-[0_0_15px_rgba(0,122,255,0.4)]"
               style={{
-                transform: `translateX(${contentType === 'movie' ? '4px' : 'calc(100% + 4px)'})`,
+                transform: `translateX(${
+                  contentType === 'movie' ? '4px' :
+                  contentType === 'tv' ? 'calc(100% + 4px)' :
+                  contentType === 'anime' ? 'calc(200% + 4px)' :
+                  'calc(300% + 4px)'
+                })`,
               }}
             />
 
             <button
               onClick={() => setContentType('movie')}
-              className={`relative z-10 py-2.5 text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'movie' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
+              className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'movie' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
                 }`}
             >
               电影
             </button>
             <button
               onClick={() => setContentType('tv')}
-              className={`relative z-10 py-2.5 text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'tv' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
+              className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'tv' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
                 }`}
             >
               电视剧
+            </button>
+            <button
+              onClick={() => setContentType('anime')}
+              className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'anime' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
+                }`}
+            >
+              动漫
+            </button>
+            <button
+              onClick={() => setContentType('variety')}
+              className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'variety' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
+                }`}
+            >
+              综艺
             </button>
           </div>
         </div>

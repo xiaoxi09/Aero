@@ -15,6 +15,7 @@ import { ScrollPositionManager } from "@/components/ScrollPositionManager";
 import { CloudSyncProvider } from "@/components/CloudSyncProvider";
 import fs from 'fs';
 import path from 'path';
+import { BottomNav } from "@/components/layout/BottomNav";
 
 // Server Component specifically for reading env/file (async for best practices)
 async function AdKeywordsWrapper() {
@@ -91,7 +92,7 @@ export default function RootLayout({
         {/* Theme Color (for browser address bar) */}
         <meta name="theme-color" content="#000000" />
         {/* Mobile viewport */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -104,6 +105,7 @@ export default function RootLayout({
               <CloudSyncProvider>
                 <AdKeywordsWrapper />
                 {children}
+                <BottomNav />
                 <BackToTop />
                 <ScrollPositionManager />
               </CloudSyncProvider>

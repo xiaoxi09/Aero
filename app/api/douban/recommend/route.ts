@@ -4,13 +4,28 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const tag = searchParams.get('tag') || '热门';
+  let tag = searchParams.get('tag') || '热门';
   const pageLimit = searchParams.get('page_limit') || '20';
   const pageStart = searchParams.get('page_start') || '0';
-  const type = searchParams.get('type') || 'movie'; // movie or tv
+  const type = searchParams.get('type') || 'movie'; // movie, tv, anime, variety
+
+  let doubanType = type;
+
+  // Intercept anime and variety mappings
+  if (type === 'anime') {
+    doubanType = 'tv';
+    if (tag === '热门' || tag === '近期热门') {
+      tag = '日本动画'; // The best default "popular" catch-all for anime
+    }
+  } else if (type === 'variety') {
+    doubanType = 'tv';
+    if (tag === '热门' || tag === '近期热门') {
+      tag = '综艺'; // The best default "popular" catch-all for variety
+    }
+  }
 
   try {
-    const url = `https://movie.douban.com/j/search_subjects?type=${type}&tag=${encodeURIComponent(tag)}&sort=recommend&page_limit=${pageLimit}&page_start=${pageStart}`;
+    const url = `https://movie.douban.com/j/search_subjects?type=${doubanType}&tag=${encodeURIComponent(tag)}&sort=recommend&page_limit=${pageLimit}&page_start=${pageStart}`;
 
     const response = await fetch(url, {
       headers: {
