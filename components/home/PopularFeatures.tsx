@@ -91,12 +91,16 @@ export function PopularFeatures({ onSearch }: PopularFeaturesProps) {
     setSelectedTag(tagId);
   };
 
+  const handleContentTypeSelect = (type: 'movie' | 'tv' | 'anime' | 'variety') => {
+    setContentType(type);
+    setIsRecommendSelected(false);
+  };
+
   return (
     <div className="animate-fade-in">
       {/* Content Type Toggle (Capsule Liquid Glass - Fixed & Centered) */}
-      {!effectiveRecommendSelected && (
-        <div className="mb-6 sm:mb-10 flex justify-center">
-          <div className="relative w-[340px] sm:w-[500px] p-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-full grid grid-cols-4 backdrop-blur-2xl shadow-lg ring-1 ring-white/10 overflow-hidden">
+      <div className="mb-6 sm:mb-10 flex justify-center">
+        <div className="relative w-[340px] sm:w-[500px] p-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-full grid grid-cols-4 backdrop-blur-2xl shadow-lg ring-1 ring-white/10 overflow-hidden">
             {/* Sliding Indicator */}
             <div
               className="absolute top-1 bottom-1 w-[calc(25%-4px)] bg-[var(--accent-color)] rounded-full transition-transform duration-400 cubic-bezier(0.4, 0, 0.2, 1) shadow-[0_0_15px_rgba(0,122,255,0.4)]"
@@ -111,28 +115,28 @@ export function PopularFeatures({ onSearch }: PopularFeaturesProps) {
             />
 
             <button
-              onClick={() => setContentType('movie')}
+              onClick={() => handleContentTypeSelect('movie')}
               className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'movie' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
                 }`}
             >
               电影
             </button>
             <button
-              onClick={() => setContentType('tv')}
+              onClick={() => handleContentTypeSelect('tv')}
               className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'tv' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
                 }`}
             >
               电视剧
             </button>
             <button
-              onClick={() => setContentType('anime')}
+              onClick={() => handleContentTypeSelect('anime')}
               className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'anime' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
                 }`}
             >
               动漫
             </button>
             <button
-              onClick={() => setContentType('variety')}
+              onClick={() => handleContentTypeSelect('variety')}
               className={`relative z-10 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-colors duration-300 cursor-pointer flex justify-center items-center ${contentType === 'variety' ? 'text-white' : 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
                 }`}
             >
@@ -140,7 +144,6 @@ export function PopularFeatures({ onSearch }: PopularFeaturesProps) {
             </button>
           </div>
         </div>
-      )}
 
       <TagManager
         tags={tags}

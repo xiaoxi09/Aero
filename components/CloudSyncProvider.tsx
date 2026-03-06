@@ -8,6 +8,7 @@ import { useHistoryStore, usePremiumHistoryStore } from '@/lib/store/history-sto
 import { useFavoritesStore, usePremiumFavoritesStore } from '@/lib/store/favorites-store';
 import { useSearchHistoryStore, usePremiumSearchHistoryStore } from '@/lib/store/search-history-store';
 import { useIPTVStore } from '@/lib/store/iptv-store';
+import { useTagsStore } from '@/lib/store/tags-store';
 import { useSyncStore } from '@/lib/store/sync-store';
 
 const DEBOUNCE_MS = 5000;
@@ -89,6 +90,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
                     if (cloudData.searchHistory) useSearchHistoryStore.setState(cloudData.searchHistory);
                     if (cloudData.premiumSearchHistory) usePremiumSearchHistoryStore.setState(cloudData.premiumSearchHistory);
                     if (cloudData.iptv) useIPTVStore.setState(cloudData.iptv);
+                    if (cloudData.tags) useTagsStore.setState(cloudData.tags);
 
                     setStatus('success', '已同步最新数据');
                 } else {
@@ -122,6 +124,7 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
             searchHistory: useSearchHistoryStore.getState(),
             premiumSearchHistory: usePremiumSearchHistoryStore.getState(),
             iptv: useIPTVStore.getState(),
+            tags: useTagsStore.getState(),
         });
 
         const triggerSync = () => {
@@ -172,10 +175,11 @@ export function CloudSyncProvider({ children }: { children: React.ReactNode }) {
         const u7 = useSearchHistoryStore.subscribe(triggerSync);
         const u8 = usePremiumSearchHistoryStore.subscribe(triggerSync);
         const u9 = useIPTVStore.subscribe(triggerSync);
+        const u10 = useTagsStore.subscribe(triggerSync);
 
         return () => {
             if (syncTimer.current) clearTimeout(syncTimer.current);
-            u1(); u2(); u3(); u4(); u5(); u6(); u7(); u8(); u9();
+            u1(); u2(); u3(); u4(); u5(); u6(); u7(); u8(); u9(); u10();
         };
     }, [hasPulled, profileId, setStatus]);
 

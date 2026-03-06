@@ -1,46 +1,46 @@
 import { useState, useEffect } from 'react';
 import { DragEndEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
-
-const DEFAULT_TAG = { id: 'popular', label: '热门', value: '热门' };
-
-const STORAGE_KEY_PREFIX = 'kvideo_custom_tags_';
+import { useTagsStore, DEFAULT_TAG, ContentType } from '@/lib/store/tags-store';
 
 export function useTagManager() {
-    const [contentType, setContentType] = useState<'movie' | 'tv' | 'anime' | 'variety'>(() => {
-        if (typeof window === 'undefined') return 'movie';
-        const saved = localStorage.getItem('kvideo_default_content_type');
-        if (saved === 'tv' || saved === 'anime' || saved === 'variety') return saved;
-        return 'movie';
-    });
+    const { 
+        contentType, 
+        setContentType, 
+        tagsByContentType, 
+        setTags: setStoreTags 
+    } = useTagsStore();
+    
+    // Derived tags for the current content type
+    const storeTags = tagsByContentType[contentType] || [];
+    
     const [selectedTag, setSelectedTag] = useState(DEFAULT_TAG.value);
-    const [tags, setTags] = useState<any[]>([]);
+    
+    // We keep a local state for rendering that syncs with the store
+    // This makes DnD and API fetching smoother
+    const [tags, setTags] = useState<any[]>(storeTags);
     const [isLoadingTags, setIsLoadingTags] = useState(false);
     const [newTagInput, setNewTagInput] = useState('');
     const [showTagManager, setShowTagManager] = useState(false);
     const [justAddedTag, setJustAddedTag] = useState(false);
 
-    // Persist content type preference
+    // Sync local tags when content type or store tags change (e.g. from Cloud sync)
     useEffect(() => {
-        localStorage.setItem('kvideo_default_content_type', contentType);
-    }, [contentType]);
-
-    const storageKey = `${STORAGE_KEY_PREFIX}${contentType}`;
+        if (storeTags.length > 0) {
+            setTags(storeTags);
+        }
+    }, [storeTags, contentType]);
 
     // Load custom tags or fetch from Douban
     useEffect(() => {
         const loadTags = async () => {
-            const saved = localStorage.getItem(storageKey);
-            if (saved) {
-                try {
-                    setTags(JSON.parse(saved));
-                    return;
-                } catch (e) {
-                    console.error('Failed to parse saved tags', e);
-                }
+            // If the store already has tags for this type, don't fetch from Douban
+            if (storeTags.length > 0) {
+                setTags(storeTags);
+                return;
             }
 
-            // If no saved tags, fetch from Douban
+            // If no saved tags in store, fetch from Douban
             setIsLoadingTags(true);
             try {
                 const response = await fetch(`/api/douban/tags?type=${contentType}`);
@@ -57,15 +57,14 @@ export function useTagManager() {
                         mappedTags.unshift(DEFAULT_TAG);
                     }
 
-                    setTags(mappedTags);
-                    // Also save to localStorage to avoid repeated fetches if desired
-                    // Actually, let's just keep them in memory for now unless they customize
+                    // Save the fetched tags into the Zustand store
+                    setStoreTags(contentType, mappedTags);
                 } else {
-                    setTags([DEFAULT_TAG]);
+                    setStoreTags(contentType, [DEFAULT_TAG]);
                 }
             } catch (error) {
                 console.error('Fetch tags error:', error);
-                setTags([DEFAULT_TAG]);
+                setStoreTags(contentType, [DEFAULT_TAG]);
             } finally {
                 setIsLoadingTags(false);
             }
@@ -73,11 +72,11 @@ export function useTagManager() {
 
         loadTags();
         setSelectedTag(DEFAULT_TAG.value);
-    }, [contentType, storageKey]);
+    }, [contentType, storeTags.length, setStoreTags]);
 
     const saveTags = (newTags: any[]) => {
-        setTags(newTags);
-        localStorage.setItem(storageKey, JSON.stringify(newTags));
+        setTags(newTags); // update local UI quickly
+        setStoreTags(contentType, newTags); // persist to store
     };
 
     const handleAddTag = () => {
@@ -100,7 +99,8 @@ export function useTagManager() {
     };
 
     const handleRestoreDefaults = async () => {
-        localStorage.removeItem(storageKey);
+        // Clear from Zustand store
+        setStoreTags(contentType, []);
         // Refresh by re-fetching
         setIsLoadingTags(true);
         try {

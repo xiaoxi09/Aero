@@ -32,8 +32,9 @@
   --radius-3xl: 2rem;
   --radius-full: 9999px;
   
-  --glass-blur: 40px;
-  --glass-saturate: 200%;
+  /* Increased for Perfect Liquid Glass */
+  --glass-blur: 48px;
+  --glass-saturate: 250%;
 
   --shadow-sm: 0 2px 8px var(--shadow-color);
   --shadow-md: 0 8px 24px var(--shadow-color);

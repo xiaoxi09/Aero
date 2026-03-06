@@ -13,6 +13,8 @@ import { AdKeywordsInjector } from "@/components/AdKeywordsInjector";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { ScrollPositionManager } from "@/components/ScrollPositionManager";
 import { CloudSyncProvider } from "@/components/CloudSyncProvider";
+import { WatchHistorySidebar } from "@/components/history/WatchHistorySidebar";
+import { FavoritesSidebar } from "@/components/favorites/FavoritesSidebar";
 import fs from 'fs';
 import path from 'path';
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -106,6 +108,8 @@ export default function RootLayout({
                 <AdKeywordsWrapper />
                 {children}
                 <BottomNav />
+                <WatchHistorySidebar />
+                <FavoritesSidebar />
                 <BackToTop />
                 <ScrollPositionManager />
               </CloudSyncProvider>

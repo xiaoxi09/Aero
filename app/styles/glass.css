@@ -1,13 +1,16 @@
-/* Glass Components */
+/* Perfect Liquid Glass */
 .glass-card {
     background: var(--glass-bg);
     opacity: 1;
     border-radius: var(--radius-3xl);
-    box-shadow: inset 0 1px 1px var(--glass-highlight), var(--shadow-md);
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.05), 
+        0 8px 32px var(--shadow-color);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    transition: transform var(--transition-fluid), box-shadow var(--transition-fluid), border-color var(--transition-fluid);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.5s ease;
     transform: translateZ(0);
     will-change: transform, box-shadow;
     position: relative;
@@ -17,18 +20,32 @@
 .glass-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     border-radius: inherit;
-    background: linear-gradient(135deg, var(--glass-highlight) 0%, transparent 40%, transparent 100%);
-    opacity: 0.4;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 40%, rgba(255, 255, 255, 0.05) 100%);
+    opacity: 0.8;
     pointer-events: none;
     z-index: 1;
 }
 
+/* Add an internal light flare to simulate thickness */
+.glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+    z-index: 2;
+}
+
 .glass-card:hover {
     transform: translateY(-4px) scale(1.01);
-    box-shadow: inset 0 1px 1px var(--glass-highlight), var(--shadow-lg);
-    border-color: color-mix(in srgb, var(--glass-border) 80%, white);
+    box-shadow: 
+        inset 0 1px 3px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.02),
+        0 12px 40px var(--shadow-color);
+    border-color: color-mix(in srgb, var(--glass-border) 70%, white);
 }
 
 .glass-input {
@@ -53,37 +70,46 @@
 .glass-button {
     background: var(--accent-color);
     color: white;
-    border: 1px solid color-mix(in srgb, var(--glass-highlight) 30%, transparent);
+    border: 1px solid color-mix(in srgb, rgba(255, 255, 255, 0.8) 30%, transparent);
     border-radius: var(--radius-full);
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1.75rem;
     font-weight: 600;
     cursor: pointer;
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    transition: all var(--transition-fluid);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 2px 8px color-mix(in srgb, var(--accent-color) 40%, transparent);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, filter 0.4s ease;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.4), 
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+        0 4px 12px color-mix(in srgb, var(--accent-color) 40%, transparent);
     position: relative;
     overflow: hidden;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .glass-button::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 60%, rgba(0, 0, 0, 0.1) 100%);
     pointer-events: none;
 }
 
 .glass-button:hover {
     transform: translateY(-2px);
-    filter: brightness(1.1);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 6px 16px color-mix(in srgb, var(--accent-color) 50%, transparent);
+    filter: brightness(1.15) contrast(1.05);
+    box-shadow: 
+        inset 0 2px 6px rgba(255, 255, 255, 0.6), 
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+        0 8px 20px color-mix(in srgb, var(--accent-color) 60%, transparent);
 }
 
 .glass-button:active {
-    transform: translateY(1px) scale(0.96);
+    transform: translateY(1px) scale(0.97);
     filter: brightness(0.95);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 2px color-mix(in srgb, var(--accent-color) 30%, transparent);
+    box-shadow: 
+        inset 0 4px 8px rgba(0, 0, 0, 0.15), 
+        0 2px 4px color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
 
 .glass-badge {
